@@ -21,6 +21,8 @@ RUN set -eux; \
     apt-get install -y --no-install-recommends \
         ca-certificates \
         curl \
+        default-mysql-client \
+        git \
         gosu \
         libfcgi-bin \
         netcat-openbsd \
@@ -55,6 +57,11 @@ COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 # Add WP-CLI (WordPress Command Line Interface)
 ADD --chmod=0755 https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar /usr/local/bin/wp
+
+# `wp package install` clones from the WP-CLI package index, which lists
+# git@github SSH source URLs. Rewrite them to HTTPS so installs work without SSH
+# credentials.
+RUN git config --system url."https://github.com/".insteadOf "git@github.com:"
 
 # ==> 4. Configure PHP <==
 # Use the production php.ini configuration file
