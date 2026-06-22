@@ -8,6 +8,8 @@ on:
       - 'Dockerfile'
       - 'scripts/**'
       - 'data/**'
+      - 'README.dockerhub.md'
+      - 'README.dockerhub-org.md'
   # Allow the workflow to be triggered manually from the GitHub Actions UI.
   workflow_dispatch:
 
@@ -27,6 +29,27 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
+
+      - name: Sync supported-extensions from upstream
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/data/supported-extensions \
+            -o data/supported-extensions
+          echo "::group::Extension compatibility check"
+          echo "Checking that all installable extensions exist upstream..."
+          MISSING=""
+          while IFS= read -r ext; do
+            [ -z "$ext" ] && continue
+            if ! grep -q "^${ext} " data/supported-extensions; then
+              echo "::warning::Extension '${ext}' not found in upstream supported-extensions"
+              MISSING="${MISSING} ${ext}"
+            fi
+          done < data/installable-extensions
+          if [ -n "$MISSING" ]; then
+            echo "::error::Unknown extensions:${MISSING}"
+            exit 1
+          fi
+          echo "All installable extensions are valid ✓"
+          echo "::endgroup::"
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -84,7 +107,7 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
           repository: ${{ secrets.DOCKER_HUB_USERNAME }}/php
-          readme-filepath: ./README.md
+          readme-filepath: ./README.dockerhub.md
 
       - name: Update Docker Hub description (org repo)
         uses: peter-evans/dockerhub-description@v4
@@ -92,4 +115,4 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
           repository: ${{ secrets.DOCKER_HUB_ORG }}/php
-          readme-filepath: ./README.md
+          readme-filepath: ./README.dockerhub-org.md

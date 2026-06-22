@@ -138,4 +138,8 @@ Found a bug or need a specific extension?
 *   [Open an Issue](https://github.com/morsalin1342/php-docker/issues)
 *   [Submit a Pull Request](https://github.com/morsalin1342/php-docker/pulls)
 
+---
+
+⭐ **If this project helps you, consider giving it a star!**
+
 *Built with ❤️ by the community.*

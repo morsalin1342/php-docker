@@ -48,20 +48,15 @@ COPY ./data/supported-extensions /tmp/supported-extensions
 # Make our script executable, run it with the correct PHP_VERSION,
 # and then clean up the temporary files.
 RUN chmod +x /usr/local/bin/install-extensions.sh && \
-    install-extensions.sh ${PHP_VERSION} && \
+    IPE_ICU_EN_ONLY=1 install-extensions.sh ${PHP_VERSION} && \
     rm /tmp/installable-extensions /tmp/supported-extensions
 
 # ==> 3. Install Global PHP Tools <==
 # Copy Composer from the official image
-COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+COPY --from=composer:2.10.1 /usr/bin/composer /usr/local/bin/composer
 
 # Add WP-CLI (WordPress Command Line Interface)
 ADD --chmod=0755 https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar /usr/local/bin/wp
-
-# `wp package install` clones from the WP-CLI package index, which lists
-# git@github SSH source URLs. Rewrite them to HTTPS so installs work without SSH
-# credentials.
-RUN git config --system url."https://github.com/".insteadOf "git@github.com:"
 
 # ==> 4. Configure PHP <==
 # Use the production php.ini configuration file
