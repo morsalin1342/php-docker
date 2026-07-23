@@ -69,5 +69,6 @@ ADD --chmod=0755 https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/w
 # ==> 4. Configure PHP <==
 # Use the production php.ini configuration file
 RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
-# Drop-in conf.d snippet routing PHP's mail() through msmtp
-COPY conf.d/mail.ini /usr/local/etc/php/conf.d/mail.ini
+# No sendmail_path is baked in: PHP's compiled default (/usr/sbin/sendmail -t -i)
+# already resolves to msmtp via msmtp-mta, so mail() works once a deployer supplies
+# an SMTP relay in /etc/msmtprc. No php.ini override needed.
