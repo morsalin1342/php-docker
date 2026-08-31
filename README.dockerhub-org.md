@@ -44,7 +44,9 @@ services:
 
 ## Tags
 
-`8.5-fpm`, `8.5-cli`, `8.4-fpm`, `8.4-cli`, `8.3-fpm`, `8.3-cli`, `8.2-fpm`, `8.2-cli` (+ `-bookworm` variants), `latest-fpm` → 8.5, `latest-cli` → 8.5
+`8.5-fpm`, `8.5-cli`, `8.4-fpm`, `8.4-cli`, `8.3-fpm`, `8.3-cli`, `8.2-fpm`, `8.2-cli` (+ `-bookworm` and `-trixie` variants), `latest-fpm` → 8.5, `latest-cli` → 8.5
+
+Unsuffixed tags are bookworm; append `-trixie` for Debian 13.
 
 ---
 
@@ -52,7 +54,7 @@ services:
 
 | Image / Tool | Description |
 |--------------|-------------|
+| [easydigital/caddy](https://hub.docker.com/r/easydigital/caddy) | Standalone Caddy with WAF, rate limiting & caching (org) |
+| [easydigital/frankenphp](https://hub.docker.com/r/easydigital/frankenphp) | Caddy + PHP app server in one container (org) |
+| [easydigital/nginx](https://hub.docker.com/r/easydigital/nginx) | nginx with ModSecurity 3, Brotli, zstd & GeoIP2 (org) |
 | [morsalin1342/php](https://hub.docker.com/r/morsalin1342/php) | Personal account mirror |
-| [easydigital/frankenphp](https://hub.docker.com/r/easydigital/frankenphp) | All-in-one PHP app server (org) |
-| [easydigital/caddy](https://hub.docker.com/r/easydigital/caddy) | Standalone Caddy (org) |
-| [caddy-souin-cache-manager](https://github.com/morsalin1342/caddy-souin-cache-manager) | WordPress plugin to manage Souin cache from WP Admin |

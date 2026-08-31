@@ -4,14 +4,23 @@ ARG PHP_VERSION=8.4
 ARG IMAGE_TYPE=fpm
 # Use a build-time argument to specify the Node.js version. Defaulting to 24.
 ARG NODE_VERSION=24
+# Debian release of the base image. bookworm is the default and owns the
+# unsuffixed tags; trixie is built alongside it and only ever gets -trixie tags.
+ARG DEBIAN_RELEASE=bookworm
 
 # Use the ARG to pull the correct base image
-FROM php:${PHP_VERSION}-${IMAGE_TYPE}-bookworm
+FROM php:${PHP_VERSION}-${IMAGE_TYPE}-${DEBIAN_RELEASE}
+
+LABEL org.opencontainers.image.title="php" \
+      org.opencontainers.image.description="PHP-FPM and CLI with 57 extensions, Composer, WP-CLI, Node.js and Supervisor" \
+      org.opencontainers.image.source="https://github.com/morsalin1342/php-docker" \
+      org.opencontainers.image.licenses="MIT"
 
 # Re-declare ARGs to be available in subsequent build stages
 ARG PHP_VERSION
 ARG IMAGE_TYPE
 ARG NODE_VERSION
+ARG DEBIAN_RELEASE
 
 # ==> 1. Install System Dependencies & Node.js <==
 # Install essential system packages and Node.js in a single layer for efficiency.
@@ -61,7 +70,7 @@ RUN chmod +x /usr/local/bin/install-extensions.sh && \
 
 # ==> 3. Install Global PHP Tools <==
 # Copy Composer from the official image
-COPY --from=composer:2.10.1 /usr/bin/composer /usr/local/bin/composer
+COPY --from=composer:2.10.2 /usr/bin/composer /usr/local/bin/composer
 
 # Add WP-CLI (WordPress Command Line Interface)
 ADD --chmod=0755 https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar /usr/local/bin/wp

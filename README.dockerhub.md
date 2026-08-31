@@ -34,14 +34,17 @@ docker run --rm -v $(pwd):/app morsalin1342/php:8.4-cli php artisan migrate
 
 ## Available Tags
 
-| Tag | Variant | PHP |
-|-----|---------|-----|
-| `latest-fpm`, `8.5-fpm`, `8.5-fpm-bookworm` | FPM | 8.5 |
-| `latest-cli`, `8.5-cli`, `8.5-cli-bookworm` | CLI | 8.5 |
-| `8.4-fpm`, `8.4-fpm-bookworm` | FPM | 8.4 |
-| `8.4-cli`, `8.4-cli-bookworm` | CLI | 8.4 |
-| `8.3-fpm`, `8.3-cli` | Both | 8.3 |
-| `8.2-fpm`, `8.2-cli` | Both | 8.2 |
+| Tag | Variant | PHP | Base OS |
+|-----|---------|-----|---------|
+| `latest-fpm`, `8.5-fpm`, `8.5-fpm-bookworm` | FPM | 8.5 | bookworm |
+| `latest-cli`, `8.5-cli`, `8.5-cli-bookworm` | CLI | 8.5 | bookworm |
+| `8.4-fpm`, `8.4-fpm-bookworm` | FPM | 8.4 | bookworm |
+| `8.4-cli`, `8.4-cli-bookworm` | CLI | 8.4 | bookworm |
+| `8.3-fpm`, `8.3-cli` | Both | 8.3 | bookworm |
+| `8.2-fpm`, `8.2-cli` | Both | 8.2 | bookworm |
+| `8.5-fpm-trixie` … `8.2-cli-trixie` | Both | 8.2–8.5 | trixie |
+
+`bookworm` owns the unsuffixed tags; append `-trixie` for Debian 13.
 
 ## Customizing Node.js Version
 
@@ -59,7 +62,7 @@ docker build . \
 
 | Image / Tool | Description |
 |--------------|-------------|
-| [morsalin1342/frankenphp](https://hub.docker.com/r/morsalin1342/frankenphp) | All-in-one PHP app server (Caddy + PHP) |
-| [morsalin1342/caddy](https://hub.docker.com/r/morsalin1342/caddy) | Standalone Caddy with plugins |
+| [morsalin1342/caddy](https://hub.docker.com/r/morsalin1342/caddy) | Standalone Caddy with WAF, rate limiting & caching |
+| [morsalin1342/frankenphp](https://hub.docker.com/r/morsalin1342/frankenphp) | Caddy + PHP app server in one container |
+| [morsalin1342/nginx](https://hub.docker.com/r/morsalin1342/nginx) | nginx with ModSecurity 3, Brotli, zstd & GeoIP2 |
 | [easydigital/php](https://hub.docker.com/r/easydigital/php) | Enterprise org mirror |
-| [caddy-souin-cache-manager](https://github.com/morsalin1342/caddy-souin-cache-manager) | WordPress plugin to manage Souin cache from WP Admin |

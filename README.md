@@ -1,8 +1,8 @@
-# 🚀 Production-Ready PHP Docker Images
+# Production-Ready PHP Docker Images
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/morsalin1342/php?style=for-the-badge&logo=docker)](https://hub.docker.com/r/morsalin1342/php)
 [![GitHub Stars](https://img.shields.io/github/stars/morsalin1342/php-docker?style=for-the-badge&logo=github)](https://github.com/morsalin1342/php-docker)
-[![License](https://img.shields.io/github/license/morsalin1342/php-docker?style=for-the-badge)](https://github.com/morsalin1342/php-docker/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/morsalin1342/php-docker?style=for-the-badge)](https://github.com/morsalin1342/php-docker/blob/master/LICENSE)
 
 High-performance, production-ready **PHP-FPM** and **PHP-CLI** Docker images, packed with extensions and tools to supercharge any modern PHP application.
 
@@ -17,7 +17,7 @@ High-performance, production-ready **PHP-FPM** and **PHP-CLI** Docker images, pa
 
 ---
 
-## 🎯 Ideal For
+## Ideal For
 
 These images are optimized for a wide range of PHP applications, including:
 
@@ -28,7 +28,7 @@ These images are optimized for a wide range of PHP applications, including:
 
 ---
 
-## ⚡ Quick Start
+## Quick Start
 
 The recommended way to use these images is to reference them directly from Docker Hub in your `docker-compose.yml` or `Dockerfile`.
 
@@ -61,7 +61,7 @@ docker run --rm -v $(pwd):/app morsalin1342/php:8.4-cli php your-script.php
 
 ---
 
-## 🛠️ Building Locally
+## Building Locally
 
 If you need to customize the images, you can build them locally. This is useful for changing the Node.js version or adding build-time dependencies.
 
@@ -80,14 +80,14 @@ docker build . \
 
 ---
 
-## 📦 What's Inside?
+## What's Inside?
 
 ### PHP Extensions
 We include everything you need for modern development:
 *   **Performance**: `apcu`, `opcache`, `redis`, `memcached`, `igbinary`.
-*   **Databases**: `mysqli`, `pdo_mysql`, `pdo_pgsql`, `mongodb`.
-*   **Async**: `swoole`, `amqp`, `pcntl`, `rdkafka`, `sockets`.
-*   **Utility & Dev**: `gd`, `intl`, `imagick`, `pcov` (for testing), and many more.
+*   **Databases**: `mysqli`, `pdo_mysql`, `pdo_pgsql`, `pgsql`, `mongodb`.
+*   **Async**: `openswoole`, `amqp`, `pcntl`, `rdkafka`, `sockets`.
+*   **Utility & Dev**: `gd`, `intl`, `imagick`, `ftp`, `opentelemetry`, `pcov` (for testing), and many more.
 
 ### Essential Tools
 *   **Composer** (Latest)
@@ -97,7 +97,7 @@ We include everything you need for modern development:
 
 ---
 
-## 🏷️ Tagging Strategy
+## Tagging Strategy
 
 We prioritize stability. Use explicit tags in your production `Dockerfile`:
 
@@ -105,6 +105,18 @@ We prioritize stability. Use explicit tags in your production `Dockerfile`:
 | :--- | :--- |
 | `morsalin1342/php:<version>-fpm` | Production Web Servers (includes Supervisor/Cron) |
 | `morsalin1342/php:<version>-cli` | Tasks, Migrations, CI/CD Pipelines |
+
+### Base OS
+
+Every version and variant is built on **both** Debian releases:
+
+| Tag shape | Base OS |
+| :--- | :--- |
+| `8.4-fpm`, `8.4-fpm-bookworm` | Debian 12 (bookworm) |
+| `8.4-fpm-trixie` | Debian 13 (trixie) |
+
+**bookworm owns the unsuffixed tags**, so `8.4-fpm` and `latest-fpm` stay on bookworm and
+nothing pinned to them changes. Ask for trixie explicitly with the `-trixie` suffix.
 
 ---
 
@@ -132,14 +144,24 @@ A: The `-fpm` images include `supervisor`. You can mount your configuration in `
 
 ---
 
-## 🤝 Contributing & Issues
+---
 
-Found a bug or need a specific extension?
-*   [Open an Issue](https://github.com/morsalin1342/php-docker/issues)
-*   [Submit a Pull Request](https://github.com/morsalin1342/php-docker/pulls)
+## Related Images & Tools
+
+Every image is published to both the personal and the organization namespace, from the same build.
+
+| Repository | Images | Description |
+|---|---|---|
+| [caddy-docker](https://github.com/morsalin1342/caddy-docker) | `morsalin1342/caddy` · `easydigital/caddy` | Standalone Caddy with WAF, rate limiting & caching |
+| [frankenphp-docker](https://github.com/morsalin1342/frankenphp-docker) | `morsalin1342/frankenphp` · `easydigital/frankenphp` | Caddy + PHP app server in one container |
+| [nginx-docker](https://github.com/morsalin1342/nginx-docker) | `morsalin1342/nginx` · `easydigital/nginx` | nginx with ModSecurity 3, Brotli, zstd & GeoIP2 |
+
+---
+
+## Feedback and Issues
+
+If you have suggestions, find a bug, or want to request a new extension, please [open an issue](https://github.com/morsalin1342/php-docker/issues) on the GitHub repository.
 
 ---
 
 ⭐ **If this project helps you, consider giving it a star!**
-
-*Built with ❤️ by the community.*
