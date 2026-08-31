@@ -1,4 +1,4 @@
-# PHP — Production-Ready FPM & CLI Images
+# PHP — Production-Ready FPM & CLI Images with Essential Extensions
 
 **Maintained by [morsalin1342](https://hub.docker.com/u/morsalin1342)** · [GitHub](https://github.com/morsalin1342/php-docker)
 

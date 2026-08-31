@@ -1,4 +1,4 @@
-# Production-Ready PHP Docker Images
+# Production-Ready PHP Docker Images with Essential Extensions
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/morsalin1342/php?style=for-the-badge&logo=docker)](https://hub.docker.com/r/morsalin1342/php)
 [![GitHub Stars](https://img.shields.io/github/stars/morsalin1342/php-docker?style=for-the-badge&logo=github)](https://github.com/morsalin1342/php-docker)
