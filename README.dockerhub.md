@@ -2,7 +2,23 @@
 
 **Maintained by [morsalin1342](https://hub.docker.com/u/morsalin1342)** · [GitHub](https://github.com/morsalin1342/php-docker)
 
-Batteries-included PHP images with 50+ extensions, Composer, WP-CLI, and configurable Node.js. Available in FPM (web) and CLI (tasks/CI) variants.
+[![Docker Pulls](https://img.shields.io/docker/pulls/morsalin1342/php?style=for-the-badge&logo=docker)](https://hub.docker.com/r/morsalin1342/php)
+[![Image Size](https://img.shields.io/docker/image-size/morsalin1342/php/latest?style=for-the-badge&logo=docker)](https://hub.docker.com/r/morsalin1342/php/tags)
+[![GitHub Stars](https://img.shields.io/github/stars/morsalin1342/php-docker?style=for-the-badge&logo=github)](https://github.com/morsalin1342/php-docker)
+[![License](https://img.shields.io/github/license/morsalin1342/php-docker?style=for-the-badge)](https://github.com/morsalin1342/php-docker/blob/master/LICENSE)
+
+Batteries-included PHP images with 57 extensions, Composer, WP-CLI, and configurable Node.js. Available in FPM (web) and CLI (tasks/CI) variants.
+
+## ✨ Why This Image?
+
+| Feature | Official image | This image |
+|---|---|---|
+| **PHP extensions** | Few built in | ✅ 57 pre-installed |
+| **Composer / WP-CLI** | ❌ | ✅ Both |
+| **Node.js** | ❌ | ✅ v24, configurable |
+| **Supervisor + Cron** | ❌ | ✅ In the FPM images |
+| **Debian releases** | One | ✅ bookworm and trixie |
+| **Variants** | Separate images | ✅ FPM and CLI from one build |
 
 ## Quick Start
 
@@ -46,7 +62,15 @@ docker run --rm -v $(pwd):/app morsalin1342/php:8.4-cli php artisan migrate
 
 `bookworm` owns the unsuffixed tags; append `-trixie` for Debian 13.
 
-## Customizing Node.js Version
+## What's Included
+
+- **57 PHP extensions** — Redis, MongoDB, PostgreSQL (`pgsql` + `pdo_pgsql`), Imagick, GD, Intl,
+  AMQP, Kafka, OpenTelemetry, openswoole, `ftp` and more
+- **Tools** — Composer, WP-CLI, Node.js 24, Supervisor, Cron, FFmpeg
+- **Two variants** — `-fpm` for web behind nginx or Caddy, `-cli` for tasks, migrations and CI
+- **Two Debian releases** — bookworm and trixie, from the same build
+
+## Customizing
 
 ```bash
 docker build . \
@@ -55,6 +79,17 @@ docker build . \
   --build-arg NODE_VERSION=22 \
   -t my-php:8.4-fpm
 ```
+
+## ❓ FAQ
+
+**Q: FPM or CLI?**
+A: FPM for web behind nginx or Caddy; CLI for migrations, queues and CI.
+
+**Q: Can I add extensions?**
+A: Yes — `RUN install-php-extensions <name>` in a layer on top.
+
+**Q: bookworm or trixie?**
+A: Unsuffixed tags are bookworm. Append `-trixie` for Debian 13.
 
 ---
 
@@ -66,3 +101,7 @@ docker build . \
 | [morsalin1342/frankenphp](https://hub.docker.com/r/morsalin1342/frankenphp) | Caddy + PHP app server in one container |
 | [morsalin1342/nginx](https://hub.docker.com/r/morsalin1342/nginx) | nginx with ModSecurity 3, Brotli, zstd & GeoIP2 |
 | [easydigital/php](https://hub.docker.com/r/easydigital/php) | Enterprise org mirror |
+
+---
+
+⭐ **If this image helps you, consider giving it a star on [GitHub](https://github.com/morsalin1342/php-docker)!**
