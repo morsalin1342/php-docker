@@ -95,12 +95,15 @@ A: Unsuffixed tags are bookworm. Append `-trixie` for Debian 13.
 
 ### 🔗 Related Images & Tools
 
+<!-- BEGIN GENERATED: related (from images.yaml in the org .github repository; do not edit by hand) -->
 | Image / Tool | Description |
 |--------------|-------------|
 | [morsalin1342/caddy](https://hub.docker.com/r/morsalin1342/caddy) | Standalone Caddy with WAF, rate limiting & caching |
 | [morsalin1342/frankenphp](https://hub.docker.com/r/morsalin1342/frankenphp) | Caddy + PHP app server in one container |
 | [morsalin1342/nginx](https://hub.docker.com/r/morsalin1342/nginx) | nginx with ModSecurity 3, Brotli, zstd & GeoIP2 |
-| [easydigital/php](https://hub.docker.com/r/easydigital/php) | Enterprise org mirror |
+| [morsalin1342/apache](https://hub.docker.com/r/morsalin1342/apache) | Apache as a static server or php-fpm application server, no PHP inside |
+| [easydigital/php](https://hub.docker.com/r/easydigital/php) | Same image, organization namespace |
+<!-- END GENERATED: related -->
 
 ---
 
