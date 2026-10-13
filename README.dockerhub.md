@@ -7,16 +7,16 @@
 [![GitHub Stars](https://img.shields.io/github/stars/morsalin1342/php-docker?style=for-the-badge&logo=github)](https://github.com/morsalin1342/php-docker)
 [![License](https://img.shields.io/github/license/morsalin1342/php-docker?style=for-the-badge)](https://github.com/morsalin1342/php-docker/blob/master/LICENSE)
 
-Batteries-included PHP images with 57 extensions, Composer, WP-CLI, and configurable Node.js. Available in FPM (web) and CLI (tasks/CI) variants.
+Batteries-included PHP images with 52 extensions, Composer, WP-CLI, the MariaDB client, and configurable Node.js. Available in FPM (web) and CLI (tasks/CI) variants.
 
 ## ✨ Why This Image?
 
 | Feature | Official image | This image |
 |---|---|---|
-| **PHP extensions** | Few built in | ✅ 57 pre-installed |
+| **PHP extensions** | Few built in | ✅ 52 pre-installed |
 | **Composer / WP-CLI** | ❌ | ✅ Both |
 | **Node.js** | ❌ | ✅ v24, configurable |
-| **Supervisor + Cron** | ❌ | ✅ In the FPM images |
+| **MariaDB client** | ❌ | ✅ `mariadb` tools, also as `mysql`, `mysqldump` |
 | **Debian releases** | One | ✅ bookworm and trixie |
 | **Variants** | Separate images | ✅ FPM and CLI from one build |
 
@@ -64,9 +64,11 @@ docker run --rm -v $(pwd):/app morsalin1342/php:8.4-cli php artisan migrate
 
 ## What's Included
 
-- **57 PHP extensions** — Redis, MongoDB, PostgreSQL (`pgsql` + `pdo_pgsql`), Imagick, GD, Intl,
-  AMQP, Kafka, OpenTelemetry, openswoole, `ftp` and more
-- **Tools** — Composer, WP-CLI, Node.js 24, Supervisor, Cron, FFmpeg
+**The full list of extensions and tools, with versions, is in [EXTENSIONS.md](https://github.com/morsalin1342/php-docker/blob/master/EXTENSIONS.md).**
+
+- **52 PHP extensions** — Redis, MongoDB, PostgreSQL (`pgsql` + `pdo_pgsql`), Imagick, GD, Intl,
+  OpenTelemetry, openswoole, `ftp` and more
+- **Tools** — Composer, WP-CLI, Node.js 24, the MariaDB client, FFmpeg
 - **Two variants** — `-fpm` for web behind nginx or Caddy, `-cli` for tasks, migrations and CI
 - **Two Debian releases** — bookworm and trixie, from the same build
 
@@ -77,6 +79,7 @@ docker build . \
   --build-arg PHP_VERSION=8.4 \
   --build-arg IMAGE_TYPE=fpm \
   --build-arg NODE_VERSION=22 \
+  --build-arg NODE_PACKAGE_VERSION=<a 22.x package from deb.nodesource.com> \
   -t my-php:8.4-fpm
 ```
 

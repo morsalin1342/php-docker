@@ -65,7 +65,7 @@ docker run --rm -v $(pwd):/app morsalin1342/php:8.4-cli php your-script.php
 
 If you need to customize the images, you can build them locally. This is useful for changing the Node.js version or adding build-time dependencies.
 
-Clone the repository and use the `--build-arg` flag:
+Clone the repository and use the `--build-arg` flag (every build argument is listed in [EXTENSIONS.md](EXTENSIONS.md#build-arguments)):
 ```bash
 git clone https://github.com/morsalin1342/php-docker.git
 cd php-docker
@@ -75,6 +75,7 @@ docker build . \
   --build-arg PHP_VERSION=8.4 \
   --build-arg IMAGE_TYPE=fpm \
   --build-arg NODE_VERSION=22 \
+  --build-arg NODE_PACKAGE_VERSION=<a 22.x package from deb.nodesource.com> \
   -t my-custom-php:8.4-fpm
 ```
 
@@ -83,17 +84,18 @@ docker build . \
 ## What's Inside?
 
 ### PHP Extensions
-We include everything you need for modern development:
+We include everything you need for modern development. **Every extension and tool, with its version and what it does, is listed in [EXTENSIONS.md](EXTENSIONS.md).**
 *   **Performance**: `apcu`, `opcache`, `redis`, `memcached`, `igbinary`.
 *   **Databases**: `mysqli`, `pdo_mysql`, `pdo_pgsql`, `pgsql`, `mongodb`.
-*   **Async**: `openswoole`, `amqp`, `pcntl`, `rdkafka`, `sockets`.
-*   **Utility & Dev**: `gd`, `intl`, `imagick`, `ftp`, `opentelemetry`, `pcov` (for testing), and many more.
+*   **Async**: `openswoole`, `pcntl`, `sockets`.
+*   **Utility & Dev**: `gd`, `intl`, `imagick`, `ftp`, `opentelemetry`, and many more.
 
 ### Essential Tools
 *   **Composer** (Latest)
 *   **WP-CLI** (WordPress command-line support)
 *   **Node.js** (Configurable via build arg, defaults to v24)
-*   **System Tools**: `supervisor`, `cron`, `ffmpeg`, `zip/unzip`.
+*   **System Tools**: the MariaDB client (`mariadb`, `mariadb-dump`, also linked as `mysql` and `mysqldump`), `acl`, `ffmpeg`, `zip/unzip`.
+*   **Not included**: `supervisor` and `cron`; run workers and schedulers as separate containers.
 
 ---
 
@@ -103,7 +105,7 @@ We prioritize stability. Use explicit tags in your production `Dockerfile`:
 
 | Variant | Use Case |
 | :--- | :--- |
-| `morsalin1342/php:<version>-fpm` | Production Web Servers (includes Supervisor/Cron) |
+| `morsalin1342/php:<version>-fpm` | Production Web Servers |
 | `morsalin1342/php:<version>-cli` | Tasks, Migrations, CI/CD Pipelines |
 
 ### Base OS
@@ -140,7 +142,7 @@ RUN install-php-extensions my-custom-extension
 A: We prioritize stability and long-term support. Node.js 24 is excellent for modern build tooling like Vite, Webpack, or TailwindCSS.
 
 **Q: How do I manage queues or background processes?**
-A: The `-fpm` images include `supervisor`. You can mount your configuration in `/etc/supervisor/conf.d/` to manage worker processes.
+A: Run them as separate containers from the same image with their own command (for example `php artisan queue:work`); the images no longer include `supervisor` or `cron`.
 
 ---
 
