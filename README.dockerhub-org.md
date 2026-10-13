@@ -17,7 +17,7 @@ Enterprise PHP images with 52 extensions, Composer, WP-CLI, and the MariaDB clie
 | **Composer / WP-CLI** | ❌ | ✅ Both |
 | **Node.js** | ❌ | ✅ v24, configurable |
 | **MariaDB client** | ❌ | ✅ `mariadb` tools, also as `mysql`, `mysqldump` |
-| **Debian releases** | One | ✅ bookworm and trixie |
+| **Debian release** | One | ✅ trixie (Debian 13) |
 | **Variants** | Separate images | ✅ FPM and CLI from one build |
 
 ## Available Variants
@@ -33,7 +33,7 @@ Enterprise PHP images with 52 extensions, Composer, WP-CLI, and the MariaDB clie
 # production.yml
 services:
   php:
-    image: easydigital/php:8.4-fpm-bookworm
+    image: easydigital/php:8.4-fpm-trixie
     restart: always
     volumes:
       - ./src:/var/www/html
@@ -60,9 +60,9 @@ services:
 
 ## Available Tags
 
-`8.5-fpm`, `8.5-cli`, `8.4-fpm`, `8.4-cli`, `8.3-fpm`, `8.3-cli`, `8.2-fpm`, `8.2-cli` (+ `-bookworm` and `-trixie` variants), `latest-fpm` → 8.5, `latest-cli` → 8.5
+`8.5-fpm`, `8.5-cli`, `8.4-fpm`, `8.4-cli`, `8.3-fpm`, `8.3-cli`, `8.2-fpm`, `8.2-cli` (+ `-trixie` aliases), `latest-fpm` → 8.5, `latest-cli` → 8.5
 
-Unsuffixed tags are bookworm; append `-trixie` for Debian 13.
+Only trixie is built; `-trixie` tags are aliases of the unsuffixed ones. Old `-bookworm` tags are no longer updated.
 
 ## What's Included
 
@@ -72,7 +72,7 @@ Unsuffixed tags are bookworm; append `-trixie` for Debian 13.
   OpenTelemetry, openswoole, `ftp` and more
 - **Tools** — Composer, WP-CLI, Node.js 24, the MariaDB client, FFmpeg
 - **Two variants** — `-fpm` for web behind nginx or Caddy, `-cli` for tasks, migrations and CI
-- **Two Debian releases** — bookworm and trixie, from the same build
+- **Debian 13 (trixie)** — the current stable release
 
 ## ❓ FAQ
 
@@ -82,8 +82,8 @@ A: FPM for web behind nginx or Caddy; CLI for migrations, queues and CI.
 **Q: Can I add extensions?**
 A: Yes — `RUN install-php-extensions <name>` in a layer on top.
 
-**Q: bookworm or trixie?**
-A: Unsuffixed tags are bookworm. Append `-trixie` for Debian 13.
+**Q: Is there a bookworm image?**
+A: No. Only trixie is built now. Older `-bookworm` tags stay on Docker Hub but are no longer updated.
 
 ---
 

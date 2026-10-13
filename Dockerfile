@@ -8,9 +8,9 @@ ARG NODE_VERSION=24
 ARG NODE_PACKAGE_VERSION=24.21.0-1nodesource1
 # Fingerprint of the NodeSource repository signing key (deb.nodesource.com/gpgkey/nodesource-repo.gpg.key).
 ARG NODE_KEY_FPR=6F71F525282841EEDAF851B42F59B5F99B1BE0B4
-# Debian release of the base image. bookworm is the default and owns the
-# unsuffixed tags; trixie is built alongside it and only ever gets -trixie tags.
-ARG DEBIAN_RELEASE=bookworm
+# Debian release of the base image. Only trixie is built; use bookworm here only
+# for a PHP version whose base image has no trixie variant.
+ARG DEBIAN_RELEASE=trixie
 # MariaDB release series of the client tools, installed from MariaDB's own apt
 # repository (the Debian client is older and conflicts with the official one).
 ARG MARIADB_SERIES=12.3

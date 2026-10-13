@@ -11,7 +11,7 @@ High-performance, production-ready **PHP-FPM** and **PHP-CLI** Docker images, pa
 ## ✨ Why These Images?
 
 *   **Batteries Included**: 50+ optimized PHP extensions, Composer, WP-CLI, and a configurable Node.js version (defaults to 24).
-*   **Production Optimized**: Built on official `php:bookworm` bases with `php.ini-production` settings.
+*   **Production Optimized**: Built on official `php` trixie bases with `php.ini-production` settings.
 *   **Multi-Version**: Maintained builds for PHP 8.2, 8.3, 8.4, and 8.5.
 *   **CI/CD Ready**: Lightweight and perfect for automated build pipelines.
 
@@ -110,15 +110,13 @@ We prioritize stability. Use explicit tags in your production `Dockerfile`:
 
 ### Base OS
 
-Every version and variant is built on **both** Debian releases:
+Every version and variant is built on Debian 13 (trixie):
 
 | Tag shape | Base OS |
 | :--- | :--- |
-| `8.4-fpm`, `8.4-fpm-bookworm` | Debian 12 (bookworm) |
-| `8.4-fpm-trixie` | Debian 13 (trixie) |
+| `8.4-fpm`, `8.4-fpm-trixie` | Debian 13 (trixie) |
 
-**bookworm owns the unsuffixed tags**, so `8.4-fpm` and `latest-fpm` stay on bookworm and
-nothing pinned to them changes. Ask for trixie explicitly with the `-trixie` suffix.
+Only trixie is built; `-trixie` tags are kept as aliases of the unsuffixed ones. bookworm is built again only for a PHP version whose official image has no trixie variant. The old `-bookworm` tags stay on Docker Hub but are no longer updated.
 
 ---
 

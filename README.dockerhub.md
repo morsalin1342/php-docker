@@ -17,7 +17,7 @@ Batteries-included PHP images with 52 extensions, Composer, WP-CLI, the MariaDB 
 | **Composer / WP-CLI** | ❌ | ✅ Both |
 | **Node.js** | ❌ | ✅ v24, configurable |
 | **MariaDB client** | ❌ | ✅ `mariadb` tools, also as `mysql`, `mysqldump` |
-| **Debian releases** | One | ✅ bookworm and trixie |
+| **Debian release** | One | ✅ trixie (Debian 13) |
 | **Variants** | Separate images | ✅ FPM and CLI from one build |
 
 ## Quick Start
@@ -52,15 +52,14 @@ docker run --rm -v $(pwd):/app morsalin1342/php:8.4-cli php artisan migrate
 
 | Tag | Variant | PHP | Base OS |
 |-----|---------|-----|---------|
-| `latest-fpm`, `8.5-fpm`, `8.5-fpm-bookworm` | FPM | 8.5 | bookworm |
-| `latest-cli`, `8.5-cli`, `8.5-cli-bookworm` | CLI | 8.5 | bookworm |
-| `8.4-fpm`, `8.4-fpm-bookworm` | FPM | 8.4 | bookworm |
-| `8.4-cli`, `8.4-cli-bookworm` | CLI | 8.4 | bookworm |
-| `8.3-fpm`, `8.3-cli` | Both | 8.3 | bookworm |
-| `8.2-fpm`, `8.2-cli` | Both | 8.2 | bookworm |
-| `8.5-fpm-trixie` … `8.2-cli-trixie` | Both | 8.2–8.5 | trixie |
+| `latest-fpm`, `8.5-fpm`, `8.5-fpm-trixie` | FPM | 8.5 | trixie |
+| `latest-cli`, `8.5-cli`, `8.5-cli-trixie` | CLI | 8.5 | trixie |
+| `8.4-fpm`, `8.4-fpm-trixie` | FPM | 8.4 | trixie |
+| `8.4-cli`, `8.4-cli-trixie` | CLI | 8.4 | trixie |
+| `8.3-fpm`, `8.3-cli` (+ `-trixie`) | Both | 8.3 | trixie |
+| `8.2-fpm`, `8.2-cli` (+ `-trixie`) | Both | 8.2 | trixie |
 
-`bookworm` owns the unsuffixed tags; append `-trixie` for Debian 13.
+Only Debian 13 (trixie) is built, and `-trixie` tags are aliases of the unsuffixed ones. The old `-bookworm` tags stay available but are no longer updated.
 
 ## What's Included
 
@@ -70,7 +69,7 @@ docker run --rm -v $(pwd):/app morsalin1342/php:8.4-cli php artisan migrate
   OpenTelemetry, openswoole, `ftp` and more
 - **Tools** — Composer, WP-CLI, Node.js 24, the MariaDB client, FFmpeg
 - **Two variants** — `-fpm` for web behind nginx or Caddy, `-cli` for tasks, migrations and CI
-- **Two Debian releases** — bookworm and trixie, from the same build
+- **Debian 13 (trixie)** — the current stable release
 
 ## Customizing
 
@@ -91,8 +90,8 @@ A: FPM for web behind nginx or Caddy; CLI for migrations, queues and CI.
 **Q: Can I add extensions?**
 A: Yes — `RUN install-php-extensions <name>` in a layer on top.
 
-**Q: bookworm or trixie?**
-A: Unsuffixed tags are bookworm. Append `-trixie` for Debian 13.
+**Q: Is there a bookworm image?**
+A: No. Only trixie is built now. Older `-bookworm` tags stay on Docker Hub but are no longer updated.
 
 ---
 

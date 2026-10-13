@@ -26,7 +26,7 @@ jobs:
       matrix:
         php_version: [ '8.2', '8.3', '8.4', '8.5' ]
         image_type: [ 'fpm', 'cli' ]
-        debian_release: [ 'bookworm', 'trixie' ]
+        debian_release: [ 'trixie' ]
 
     steps:
       - name: Check out the repo
@@ -70,16 +70,15 @@ jobs:
             morsalin1342/php
             easydigital/php
           # Generate tags based on the PHP version and image type.
-          # Example for php_version=8.4, image_type=fpm: 8.4-fpm, 8.4-fpm-bookworm
-          # Example for php_version=8.4, image_type=cli: 8.4-cli, 8.4-cli-bookworm
-          # bookworm owns the unsuffixed tags, so existing consumers pinned to
-          # `8.4-fpm` or `latest-fpm` keep getting bookworm and nothing breaks.
-          # trixie is published alongside it under -trixie tags only. Swapping the
-          # default later is a one-line change to the two `enable=` conditions.
+          # Example for php_version=8.4, image_type=fpm: 8.4-fpm, 8.4-fpm-trixie
+          # Example for php_version=8.4, image_type=cli: 8.4-cli, 8.4-cli-trixie
+          # Only trixie is built. bookworm is built again only for a PHP version whose
+          # official image has no trixie variant. The -trixie tags stay as aliases, and
+          # the old -bookworm tags are no longer updated.
           tags: |
             type=raw,value=${{ matrix.php_version }}-${{ matrix.image_type }}-${{ matrix.debian_release }}
-            type=raw,value=${{ matrix.php_version }}-${{ matrix.image_type }},enable=${{ matrix.debian_release == 'bookworm' }}
-            type=raw,value=latest-${{ matrix.image_type }},enable=${{ matrix.php_version == '8.5' && matrix.debian_release == 'bookworm' }}
+            type=raw,value=${{ matrix.php_version }}-${{ matrix.image_type }}
+            type=raw,value=latest-${{ matrix.image_type }},enable=${{ matrix.php_version == '8.5' }}
 
       - name: Build and push Docker image
         id: build-and-push
