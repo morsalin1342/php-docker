@@ -4,8 +4,13 @@ ARG PHP_VERSION=8.4
 ARG IMAGE_TYPE=fpm
 # Use a build-time argument to specify the Node.js version. Defaulting to 24.
 ARG NODE_VERSION=24
-# Exact NodeSource package of that Node.js line (24.21.0 is the LTS "Krypton" of 2026-09-07).
-ARG NODE_PACKAGE_VERSION=24.21.0-1nodesource1
+# Exact NodeSource package of that Node.js line (24.22.1, NodeSource node_24.x, 2026-10-27).
+ARG NODE_PACKAGE_VERSION=24.22.1-1nodesource1
+# npm replaces the one bundled with Node: npm 11.19.1 (Node 24.22.1) still bundles
+# brace-expansion and undici releases with high CVEs; npm 12.2.1 fixes all but
+# undici CVE-2026-109869 (needs undici 6.29.1, in no npm release yet; waived in
+# the SitesPanel image manifest until it is).
+ARG NPM_VERSION=12.2.1
 # Fingerprint of the NodeSource repository signing key (deb.nodesource.com/gpgkey/nodesource-repo.gpg.key).
 ARG NODE_KEY_FPR=6F71F525282841EEDAF851B42F59B5F99B1BE0B4
 # Debian release of the base image. Only trixie is built; use bookworm here only
@@ -33,6 +38,7 @@ ARG PHP_VERSION
 ARG IMAGE_TYPE
 ARG NODE_VERSION
 ARG NODE_PACKAGE_VERSION
+ARG NPM_VERSION
 ARG NODE_KEY_FPR
 ARG DEBIAN_RELEASE
 ARG MARIADB_SERIES
@@ -100,7 +106,10 @@ RUN set -eux; \
         printf '#!/bin/bash\nexec -a %s /usr/bin/%s "$@"\n' "${t#*:}" "${t#*:}" > "/usr/bin/${t%%:*}"; \
         chmod 0755 "/usr/bin/${t%%:*}"; \
     done; \
-    rm -rf /var/lib/apt/lists/*
+    npm install -g "npm@${NPM_VERSION}"; \
+    npm cache clean --force; \
+    test "$(npm -v)" = "${NPM_VERSION}"; \
+    rm -rf /var/lib/apt/lists/* /root/.npm
 
 # ==> 2. Install PHP Extensions <==
 # First, copy the main installer utility from the official image
