@@ -48,8 +48,8 @@ A minimal [`nginx.conf`](https://github.com/morsalin1342/php-docker/blob/master/
 ### CLI Tasks
 
 ```bash
-docker run --rm -v $(pwd):/app morsalin1342/php:8.4-cli composer install
-docker run --rm -v $(pwd):/app morsalin1342/php:8.4-cli php artisan migrate
+docker run --rm -v $(pwd):/app -w /app morsalin1342/php:8.4-cli composer install
+docker run --rm -v $(pwd):/app -w /app morsalin1342/php:8.4-cli php artisan migrate
 ```
 
 ## Available Tags

@@ -64,10 +64,10 @@ application in `./src` and run `docker compose up`, then open <http://localhost:
 ### For CLI Tasks
 ```bash
 # Run Composer install
-docker run --rm -v $(pwd):/app morsalin1342/php:8.4-cli composer install
+docker run --rm -v $(pwd):/app -w /app morsalin1342/php:8.4-cli composer install
 
 # Run a specific PHP script
-docker run --rm -v $(pwd):/app morsalin1342/php:8.4-cli php your-script.php
+docker run --rm -v $(pwd):/app -w /app morsalin1342/php:8.4-cli php your-script.php
 ```
 
 ---

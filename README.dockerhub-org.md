@@ -58,7 +58,7 @@ A minimal [`nginx.conf`](https://github.com/morsalin1342/php-docker/blob/master/
 ```yaml
 - name: Run tests
   run: |
-    docker run --rm -v ${{ github.workspace }}:/app easydigital/php:8.4-cli \
+    docker run --rm -v ${{ github.workspace }}:/app -w /app easydigital/php:8.4-cli \
       sh -c "composer install && php vendor/bin/phpunit"
 ```
 
