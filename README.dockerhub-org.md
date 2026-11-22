@@ -60,7 +60,7 @@ services:
 
 ## Available Tags
 
-`8.5-fpm`, `8.5-cli`, `8.4-fpm`, `8.4-cli`, `8.3-fpm`, `8.3-cli`, `8.2-fpm`, `8.2-cli` (+ `-trixie` aliases), `latest-fpm` → 8.5, `latest-cli` → 8.5
+`8.5-fpm`, `8.5-cli`, `8.4-fpm`, `8.4-cli`, `8.3-fpm`, `8.3-cli`, `8.2-fpm`, `8.2-cli` (+ `-trixie` aliases), `latest-fpm` → 8.5, `latest-cli` → 8.5. The bare tags `8.5`, `8.4`, `8.3`, `8.2` and `latest` are the FPM variant.
 
 Only trixie is built; `-trixie` tags are aliases of the unsuffixed ones. Old `-bookworm` tags are no longer updated.
 

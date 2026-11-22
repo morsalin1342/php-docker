@@ -4,13 +4,12 @@ ARG PHP_VERSION=8.4
 ARG IMAGE_TYPE=fpm
 # Use a build-time argument to specify the Node.js version. Defaulting to 24.
 ARG NODE_VERSION=24
-# Exact NodeSource package of that Node.js line (24.22.1, NodeSource node_24.x, 2026-10-27).
-ARG NODE_PACKAGE_VERSION=24.22.1-1nodesource1
+# Exact NodeSource package of that Node.js line (24.22.3, the 2026-11-10 security release; NodeSource node_24.x, 2026-11-22).
+ARG NODE_PACKAGE_VERSION=24.22.3-1nodesource1
 # npm replaces the one bundled with Node: npm 11.19.1 (Node 24.22.1) still bundles
-# brace-expansion and undici releases with high CVEs; npm 12.2.1 fixes all but
-# undici CVE-2026-109869 (needs undici 6.29.1, in no npm release yet; waived in
-# the SitesPanel image manifest until it is).
-ARG NPM_VERSION=12.2.1
+# brace-expansion and undici releases with high CVEs; npm 12.2.3 bundles undici
+# 6.29.1, which fixes CVE-2026-109869, CVE-2026-109383 and CVE-2026-87018.
+ARG NPM_VERSION=12.2.3
 # Fingerprint of the NodeSource repository signing key (deb.nodesource.com/gpgkey/nodesource-repo.gpg.key).
 ARG NODE_KEY_FPR=6F71F525282841EEDAF851B42F59B5F99B1BE0B4
 # Debian release of the base image. Only trixie is built; use bookworm here only
@@ -47,15 +46,16 @@ ARG WP_CLI_VERSION
 ARG WP_CLI_SHA256
 
 # ==> 0. Refuse a PHP below the fixed releases <==
-# CVE-2026-109618 and CVE-2026-109619 (GHSA-w8hw-w9fx-j79w, GHSA-6wmf-4rv5-p3rp) are fixed in 8.2.35, 8.3.36,
-# 8.4.27 and 8.5.12. A base image older than that fails the build instead of shipping. Raise the floor when
+# The November 2026 releases (8.2.36, 8.3.37, 8.4.28, 8.5.13) fix 14 advisories, among them
+# CVE-2026-129496, CVE-2026-129481, CVE-2026-126714 and CVE-2026-129289 (php.net/ChangeLog-8.php).
+# A base image older than that fails the build instead of shipping. Raise the floor when
 # a later advisory needs it.
 RUN set -eu; \
     case "${PHP_VERSION}" in \
-      8.2) min=8.2.35 ;; \
-      8.3) min=8.3.36 ;; \
-      8.4) min=8.4.27 ;; \
-      8.5) min=8.5.12 ;; \
+      8.2) min=8.2.36 ;; \
+      8.3) min=8.3.37 ;; \
+      8.4) min=8.4.28 ;; \
+      8.5) min=8.5.13 ;; \
       *) echo "no security floor is set for PHP ${PHP_VERSION}"; exit 1 ;; \
     esac; \
     php -r 'exit(version_compare(PHP_VERSION, $argv[1], ">=") ? 0 : 1);' "$min" \
@@ -72,6 +72,9 @@ RUN set -eu; \
 RUN set -eux; \
     export DEBIAN_FRONTEND=noninteractive; \
     apt-get update; \
+    # Debian's security updates for everything the base image ships (zlib1g
+    # CVE-2026-85091, libbrotli1, ImageMagick, OpenEXR and others fixed in trixie).
+    apt-get upgrade -y --no-install-recommends; \
     apt-get install -y --no-install-recommends ca-certificates curl gnupg; \
     install -d -m 0755 /etc/apt/keyrings; \
     curl -fsSL https://mariadb.org/mariadb_release_signing_key.asc -o /etc/apt/keyrings/mariadb.asc; \

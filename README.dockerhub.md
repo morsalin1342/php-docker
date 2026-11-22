@@ -52,12 +52,12 @@ docker run --rm -v $(pwd):/app morsalin1342/php:8.4-cli php artisan migrate
 
 | Tag | Variant | PHP | Base OS |
 |-----|---------|-----|---------|
-| `latest-fpm`, `8.5-fpm`, `8.5-fpm-trixie` | FPM | 8.5 | trixie |
+| `latest`, `latest-fpm`, `8.5`, `8.5-fpm`, `8.5-fpm-trixie` | FPM | 8.5 | trixie |
 | `latest-cli`, `8.5-cli`, `8.5-cli-trixie` | CLI | 8.5 | trixie |
-| `8.4-fpm`, `8.4-fpm-trixie` | FPM | 8.4 | trixie |
+| `8.4`, `8.4-fpm`, `8.4-fpm-trixie` | FPM | 8.4 | trixie |
 | `8.4-cli`, `8.4-cli-trixie` | CLI | 8.4 | trixie |
-| `8.3-fpm`, `8.3-cli` (+ `-trixie`) | Both | 8.3 | trixie |
-| `8.2-fpm`, `8.2-cli` (+ `-trixie`) | Both | 8.2 | trixie |
+| `8.3`, `8.3-fpm`, `8.3-cli` (+ `-trixie`) | Both (`8.3` is FPM) | 8.3 | trixie |
+| `8.2`, `8.2-fpm`, `8.2-cli` (+ `-trixie`) | Both (`8.2` is FPM) | 8.2 | trixie |
 
 Only Debian 13 (trixie) is built, and `-trixie` tags are aliases of the unsuffixed ones. The old `-bookworm` tags stay available but are no longer updated.
 

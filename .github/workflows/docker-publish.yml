@@ -75,10 +75,15 @@ jobs:
           # Only trixie is built. bookworm is built again only for a PHP version whose
           # official image has no trixie variant. The -trixie tags stay as aliases, and
           # the old -bookworm tags are no longer updated.
+          # The bare version tags and `latest` are FPM, as they were before the -fpm/-cli
+          # split. They stopped being written then and kept serving the 2026-04-06 images;
+          # writing them here keeps `docker pull morsalin1342/php` and `:8.4` current.
           tags: |
             type=raw,value=${{ matrix.php_version }}-${{ matrix.image_type }}-${{ matrix.debian_release }}
             type=raw,value=${{ matrix.php_version }}-${{ matrix.image_type }}
             type=raw,value=latest-${{ matrix.image_type }},enable=${{ matrix.php_version == '8.5' }}
+            type=raw,value=${{ matrix.php_version }},enable=${{ matrix.image_type == 'fpm' }}
+            type=raw,value=latest,enable=${{ matrix.php_version == '8.5' && matrix.image_type == 'fpm' }}
 
       - name: Build and push Docker image
         id: build-and-push
