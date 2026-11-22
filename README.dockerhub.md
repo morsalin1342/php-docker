@@ -7,7 +7,7 @@
 [![GitHub Stars](https://img.shields.io/github/stars/morsalin1342/php-docker?style=for-the-badge&logo=github)](https://github.com/morsalin1342/php-docker)
 [![License](https://img.shields.io/github/license/morsalin1342/php-docker?style=for-the-badge)](https://github.com/morsalin1342/php-docker/blob/master/LICENSE)
 
-PHP 8.2 to 8.5 images with 52 extensions on top of the official image's (counted on PHP 8.5), Composer 2.11.2, WP-CLI 2.12.0, the MariaDB client and Node.js 24. Available in FPM (web) and CLI (tasks/CI) variants.
+PHP 8.2 to 8.5 images with 51 extensions on top of the official image's (counted on PHP 8.5), Composer 2.11.2, WP-CLI 2.12.0, the MariaDB client and Node.js 24. Available in FPM (web) and CLI (tasks/CI) variants.
 
 **Platform:** linux/amd64 only. `morsalin1342/php` and `easydigital/php` are the same image, pushed by the same build with the same digest; pull whichever you prefer.
 
@@ -15,7 +15,7 @@ PHP 8.2 to 8.5 images with 52 extensions on top of the official image's (counted
 
 | Feature | Official image | This image |
 |---|---|---|
-| **PHP extensions** | 35 loaded on PHP 8.5 | ✅ 52 more installed on PHP 8.5 |
+| **PHP extensions** | 36 loaded on PHP 8.5 | ✅ 51 more installed on PHP 8.5 |
 | **Composer / WP-CLI** | ❌ | ✅ Both |
 | **Node.js** | ❌ | ✅ v24, configurable |
 | **MariaDB client** | ❌ | ✅ `mariadb` tools, also as `mysql`, `mysqldump` |
@@ -69,7 +69,7 @@ Only Debian 13 (trixie) is built, and `-trixie` tags are aliases of the unsuffix
 
 **The full list of extensions and tools, with versions, is in [EXTENSIONS.md](https://github.com/morsalin1342/php-docker/blob/master/EXTENSIONS.md).**
 
-- **52 PHP extensions** — Redis, MongoDB, PostgreSQL (`pgsql` + `pdo_pgsql`), Imagick, GD, Intl,
+- **51 added PHP extensions** — Redis, MongoDB, PostgreSQL (`pgsql` + `pdo_pgsql`), Imagick, GD, Intl,
   OpenTelemetry, openswoole, `ftp` and more
 - **Tools** — Composer 2.11.2, WP-CLI 2.12.0, Node.js 24, the MariaDB client, FFmpeg
 - **Two variants** — `-fpm` for web behind nginx or Caddy, `-cli` for tasks, migrations and CI

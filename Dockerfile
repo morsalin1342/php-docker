@@ -39,7 +39,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # has been derived for all of it. The base image sets no licences label today; the
 # empty value keeps it that way if one is added.
 LABEL org.opencontainers.image.title="php" \
-      org.opencontainers.image.description="PHP-FPM and CLI with 52 extensions, Composer, WP-CLI, the MariaDB client and Node.js" \
+      org.opencontainers.image.description="PHP-FPM and CLI with 51 extensions added to the official image, Composer, WP-CLI, the MariaDB client and Node.js" \
       org.opencontainers.image.source="https://github.com/morsalin1342/php-docker" \
       org.opencontainers.image.licenses=""
 

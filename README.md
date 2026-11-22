@@ -6,7 +6,7 @@
 [![Docker Publish](https://github.com/morsalin1342/php-docker/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/morsalin1342/php-docker/actions/workflows/docker-publish.yml)
 
 PHP-FPM and PHP-CLI images for PHP 8.2, 8.3, 8.4 and 8.5, built on the official `php` images
-(Debian 13, trixie). Each adds PHP extensions to the ones the official image loads (52 more on
+(Debian 13, trixie). Each adds PHP extensions to the ones the official image loads (51 more on
 PHP 8.5), plus Composer, WP-CLI, the MariaDB client and Node.js. There is no web server inside: pair the FPM image with
 nginx, Apache or Caddy over FastCGI.
 
@@ -20,7 +20,7 @@ docker pull morsalin1342/php:8.4-fpm
 
 | | Official `php` | This image |
 |---|---|---|
-| PHP extensions loaded | 35 on PHP 8.5 | 87 on PHP 8.5: the same 35 plus 52 installed — see [EXTENSIONS.md](EXTENSIONS.md) |
+| PHP extensions loaded | 36 on PHP 8.5 | 87 on PHP 8.5: the same 36 plus 51 installed — see [EXTENSIONS.md](EXTENSIONS.md) |
 | `php.ini` | none; `php.ini-production` is a template | `php.ini-production` copied into place |
 | Composer | ❌ | 2.11.2 |
 | WP-CLI | ❌ | 2.12.0, checked against its published SHA-256 |
