@@ -114,7 +114,7 @@ The repository's build files are MIT. PHP (PHP License 3.01), Composer and WP-CL
 | [morsalin1342/caddy](https://hub.docker.com/r/morsalin1342/caddy) | Standalone Caddy with WAF, rate limiting & caching |
 | [morsalin1342/frankenphp](https://hub.docker.com/r/morsalin1342/frankenphp) | Caddy + PHP app server in one container |
 | [morsalin1342/nginx](https://hub.docker.com/r/morsalin1342/nginx) | nginx with ModSecurity 3, Brotli, zstd & GeoIP2 |
-| [morsalin1342/apache](https://hub.docker.com/r/morsalin1342/apache) | Apache as a static server or php-fpm application server, no PHP inside |
+| [morsalin1342/apache](https://hub.docker.com/r/morsalin1342/apache) | Apache httpd as a static server or php-fpm application server, no PHP inside |
 | [morsalin1342/adminer](https://hub.docker.com/r/morsalin1342/adminer) | Adminer database tool: the official image plus Alpine security updates |
 | [easydigital/php](https://hub.docker.com/r/easydigital/php) | Same image, organization namespace |
 <!-- END GENERATED: related -->
