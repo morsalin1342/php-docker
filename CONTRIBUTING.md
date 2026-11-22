@@ -33,10 +33,12 @@ Thanks for your interest in improving these Docker images!
 │   ├── installable-extensions    # Extensions we want to install
 │   └── supported-extensions      # Upstream compatibility matrix, from the pinned installer release (synced in CI)
 ├── scripts/
-│   └── install-extensions.sh     # Extension filtering and install script
+│   ├── install-extensions.sh     # Extension filtering and install script
+│   └── check-upstream.sh         # Compares the version pins with upstream (run weekly in CI)
 ├── php.ini.example               # Example hardened PHP config (copy to php.ini and mount)
 ├── www.conf.example              # Example FPM pool config (copy to www.conf and mount)
-└── .github/workflows/            # CI/CD pipeline
+├── .trivyignore                  # Trivy waivers (ID, reason, expiry); empty for now
+└── .github/workflows/            # Build, scan and publish; weekly upstream check; docs check
 ```
 
 ## Code Style
