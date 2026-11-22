@@ -27,10 +27,15 @@ ARG WP_CLI_SHA256=ce34ddd838f7351d6759068d09793f26755463b4a4610a5a5c0a97b68220d8
 # Use the ARG to pull the correct base image
 FROM php:${PHP_VERSION}-${IMAGE_TYPE}-${DEBIAN_RELEASE}
 
+# licenses is empty on purpose. The repository's own files are MIT, but the image
+# combines software under many licences (the README's Licence section names the main
+# ones; the SBOM each build keeps lists every package), and no single SPDX expression
+# has been derived for all of it. The base image sets no licences label today; the
+# empty value keeps it that way if one is added.
 LABEL org.opencontainers.image.title="php" \
       org.opencontainers.image.description="PHP-FPM and CLI with 52 extensions, Composer, WP-CLI, the MariaDB client and Node.js" \
       org.opencontainers.image.source="https://github.com/morsalin1342/php-docker" \
-      org.opencontainers.image.licenses="MIT"
+      org.opencontainers.image.licenses=""
 
 # Re-declare ARGs to be available in subsequent build stages
 ARG PHP_VERSION
