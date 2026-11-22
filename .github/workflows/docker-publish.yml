@@ -198,7 +198,7 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
           repository: morsalin1342/php
           readme-filepath: ./README.dockerhub.md
-          short-description: 'Production-ready PHP-FPM & CLI images: 52 extensions, Composer, WP-CLI, Node.js. PHP 8.2-8.5'
+          short-description: 'PHP-FPM & CLI images: 52 extensions, Composer, WP-CLI, Node.js. PHP 8.2-8.5'
 
       - name: Update Docker Hub description (org repo)
         uses: peter-evans/dockerhub-description@v5
@@ -207,4 +207,4 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
           repository: easydigital/php
           readme-filepath: ./README.dockerhub-org.md
-          short-description: 'Production-ready PHP-FPM & CLI images: 52 extensions, Composer, WP-CLI, Node.js. PHP 8.2-8.5'
+          short-description: 'PHP-FPM & CLI images: 52 extensions, Composer, WP-CLI, Node.js. PHP 8.2-8.5'
