@@ -28,6 +28,12 @@ on:
 permissions:
   contents: read
 
+# One publish run per branch at a time. A second run waits instead of cancelling the
+# first, so a push is never interrupted halfway through writing tags.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   build_and_publish:
     runs-on: ubuntu-latest
