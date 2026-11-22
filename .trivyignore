@@ -1,0 +1,12 @@
+# Vulnerabilities the publish workflow's Trivy gate may skip.
+#
+# The gate fails a build on any fixable CRITICAL or HIGH finding. A finding is
+# waived here only when it does not apply to this image or cannot be fixed yet,
+# and only until a stated date. One waiver per entry, in this format:
+#
+#   # <reason it is waived>; expires YYYY-MM-DD
+#   <vulnerability ID, for example CVE-2026-12345>
+#
+# Remove the entry on or before its expiry date, or renew it with a new reason.
+# Trivy does not read the expiry: it is a reminder for whoever reviews this file.
+# There are no waivers at present.
