@@ -52,9 +52,16 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Sync supported-extensions from upstream
+      # The list comes from the same installer release the Dockerfile copies, so the
+      # extensions the build picks match what that installer supports.
+      - name: Sync supported-extensions from the pinned installer release
         run: |
-          curl -fsSL https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/data/supported-extensions \
+          IPE_VERSION=$(sed -n 's|^COPY --from=ghcr.io/mlocati/php-extension-installer:\([0-9.]*\)@.*|\1|p' Dockerfile)
+          if [ -z "$IPE_VERSION" ]; then
+            echo "::error::Could not read the php-extension-installer release from the Dockerfile."
+            exit 1
+          fi
+          curl -fsSL "https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/${IPE_VERSION}/data/supported-extensions" \
             -o data/supported-extensions
           echo "::group::Extension compatibility check"
           echo "Checking that all installable extensions exist upstream..."
