@@ -22,7 +22,7 @@ docker pull morsalin1342/php:8.4-fpm
 |---|---|---|
 | PHP extensions loaded | 35 on PHP 8.5 | 87 on PHP 8.5: the same 35 plus 52 installed — see [EXTENSIONS.md](EXTENSIONS.md) |
 | `php.ini` | none; `php.ini-production` is a template | `php.ini-production` copied into place |
-| Composer | ❌ | 2.10.3 |
+| Composer | ❌ | 2.11.2 |
 | WP-CLI | ❌ | 2.12.0, checked against its published SHA-256 |
 | Node.js and npm | ❌ | Node.js 24 from NodeSource's signed repository, npm 12.2.3 |
 | MariaDB client | ❌ | from MariaDB's signed repository; also answers to `mysql` and `mysqldump` |
@@ -98,7 +98,7 @@ docker build . \
 *   **Utility & Dev**: `gd`, `intl`, `imagick`, `ftp`, `opentelemetry`, and many more.
 
 ### Essential Tools
-*   **Composer** 2.10.3
+*   **Composer** 2.11.2
 *   **WP-CLI** 2.12.0 (WordPress command-line support)
 *   **Node.js** (Configurable via build arg, defaults to v24)
 *   **System Tools**: the MariaDB client (`mariadb`, `mariadb-dump`, also linked as `mysql` and `mysqldump`), `acl`, `ffmpeg`, `zip/unzip`.

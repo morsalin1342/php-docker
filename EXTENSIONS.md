@@ -138,7 +138,7 @@ These are absent from the images; add them in your own image if you need them.
 | Tool | Version | Notes |
 |---|---|---|
 | PHP | 8.5.11 (NTS) | The tag selects the version: 8.2, 8.3, 8.4 or 8.5. |
-| Composer | 2.10.3 |  |
+| Composer | 2.11.2 | Copied from the official `composer:2.11.2` image, pinned by digest. |
 | WP-CLI | 2.12.0 | A pinned release, checked against its published SHA-256 at build time (`WP_CLI_VERSION`, `WP_CLI_SHA256`). |
 | Node.js / npm | 24.21.0 / 11.19.0 | Major version set by the `NODE_VERSION` build argument (default 24). |
 | MariaDB client | 12.3.3 | From MariaDB's own apt repository (series set by `MARIADB_SERIES`; the repository key is checked against a pinned fingerprint). The `mysql`, `mysqldump`, `mysqlcheck`, `mysqladmin`, `mysqlimport` and `mysqlshow` commands are small wrappers for the `mariadb*` tools, which run under their own names so that no "Deprecated program name" notice is printed. There is no MySQL client. |

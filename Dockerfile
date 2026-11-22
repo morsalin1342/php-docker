@@ -137,8 +137,8 @@ RUN chmod +x /usr/local/bin/install-extensions.sh && \
     rm /tmp/installable-extensions /tmp/supported-extensions
 
 # ==> 3. Install Global PHP Tools <==
-# Copy Composer from the official image
-COPY --from=composer:2.10.3 /usr/bin/composer /usr/local/bin/composer
+# Copy Composer from the official image, pinned to a release and its digest
+COPY --from=composer:2.11.2@sha256:50ea4d33fdcde1adb0f045547295faa1548b33872e5f789dae5b02ce2fb5de93 /usr/bin/composer /usr/local/bin/composer
 
 # Add WP-CLI (WordPress Command Line Interface)
 # (a pinned release, verified against its published SHA-256)
