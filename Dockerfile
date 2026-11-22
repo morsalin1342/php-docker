@@ -24,7 +24,10 @@ ARG MARIADB_KEY_FPR=177F4010FE56CA3336300305F1656F24C74CD1D8
 ARG WP_CLI_VERSION=2.12.0
 ARG WP_CLI_SHA256=ce34ddd838f7351d6759068d09793f26755463b4a4610a5a5c0a97b68220d85c
 
-# Use the ARG to pull the correct base image
+# Use the ARG to pull the correct base image. This base is not pinned by digest on
+# purpose: the tag comes from the build matrix (one per PHP version and variant), and
+# the weekly rebuild pulls it again so PHP patch releases and Debian fixes arrive. The
+# security floor in step 0 refuses a base older than the fixed PHP releases.
 FROM php:${PHP_VERSION}-${IMAGE_TYPE}-${DEBIAN_RELEASE}
 
 # bash with pipefail, so a failing command on the left of a pipe fails the RUN.
