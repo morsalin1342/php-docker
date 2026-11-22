@@ -27,6 +27,9 @@ ARG WP_CLI_SHA256=ce34ddd838f7351d6759068d09793f26755463b4a4610a5a5c0a97b68220d8
 # Use the ARG to pull the correct base image
 FROM php:${PHP_VERSION}-${IMAGE_TYPE}-${DEBIAN_RELEASE}
 
+# bash with pipefail, so a failing command on the left of a pipe fails the RUN.
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 # licenses is empty on purpose. The repository's own files are MIT, but the image
 # combines software under many licences (the README's Licence section names the main
 # ones; the SBOM each build keeps lists every package), and no single SPDX expression
@@ -55,6 +58,8 @@ ARG WP_CLI_SHA256
 # CVE-2026-129496, CVE-2026-129481, CVE-2026-126714 and CVE-2026-129289 (php.net/ChangeLog-8.php).
 # A base image older than that fails the build instead of shipping. Raise the floor when
 # a later advisory needs it.
+# The single quotes are PHP code, so $argv is PHP's, not the shell's.
+# hadolint ignore=SC2016
 RUN set -eu; \
     case "${PHP_VERSION}" in \
       8.2) min=8.2.36 ;; \
@@ -74,6 +79,9 @@ RUN set -eu; \
 # bare symlink makes every call print a "Deprecated program name" notice).
 # Node.js comes from NodeSource's apt repository the same way: key checked against
 # a pinned fingerprint, exact package version (no installer script is piped into a shell).
+# The other Debian packages are not pinned to versions: they come from trixie and its
+# security updates as of the build, which the weekly rebuild refreshes.
+# hadolint ignore=DL3008
 RUN set -eux; \
     export DEBIAN_FRONTEND=noninteractive; \
     apt-get update; \
