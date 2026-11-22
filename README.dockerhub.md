@@ -1,4 +1,4 @@
-# PHP — Production-Ready FPM & CLI Images with Essential Extensions
+# PHP — FPM & CLI Images with Extensions, Composer, WP-CLI and Node.js
 
 **Maintained by [morsalin1342](https://hub.docker.com/u/morsalin1342)** · [GitHub](https://github.com/morsalin1342/php-docker)
 
@@ -7,13 +7,15 @@
 [![GitHub Stars](https://img.shields.io/github/stars/morsalin1342/php-docker?style=for-the-badge&logo=github)](https://github.com/morsalin1342/php-docker)
 [![License](https://img.shields.io/github/license/morsalin1342/php-docker?style=for-the-badge)](https://github.com/morsalin1342/php-docker/blob/master/LICENSE)
 
-Batteries-included PHP images with 52 extensions, Composer, WP-CLI, the MariaDB client, and configurable Node.js. Available in FPM (web) and CLI (tasks/CI) variants.
+PHP 8.2 to 8.5 images with 52 extensions on top of the official image's (counted on PHP 8.5), Composer 2.10.3, WP-CLI 2.12.0, the MariaDB client and Node.js 24. Available in FPM (web) and CLI (tasks/CI) variants.
+
+**Platform:** linux/amd64 only. `morsalin1342/php` and `easydigital/php` are the same image, pushed by the same build with the same digest; pull whichever you prefer.
 
 ## ✨ Why This Image?
 
 | Feature | Official image | This image |
 |---|---|---|
-| **PHP extensions** | Few built in | ✅ 52 pre-installed |
+| **PHP extensions** | 35 loaded on PHP 8.5 | ✅ 52 more installed on PHP 8.5 |
 | **Composer / WP-CLI** | ❌ | ✅ Both |
 | **Node.js** | ❌ | ✅ v24, configurable |
 | **MariaDB client** | ❌ | ✅ `mariadb` tools, also as `mysql`, `mysqldump` |
@@ -67,7 +69,7 @@ Only Debian 13 (trixie) is built, and `-trixie` tags are aliases of the unsuffix
 
 - **52 PHP extensions** — Redis, MongoDB, PostgreSQL (`pgsql` + `pdo_pgsql`), Imagick, GD, Intl,
   OpenTelemetry, openswoole, `ftp` and more
-- **Tools** — Composer, WP-CLI, Node.js 24, the MariaDB client, FFmpeg
+- **Tools** — Composer 2.10.3, WP-CLI 2.12.0, Node.js 24, the MariaDB client, FFmpeg
 - **Two variants** — `-fpm` for web behind nginx or Caddy, `-cli` for tasks, migrations and CI
 - **Debian 13 (trixie)** — the current stable release
 
@@ -92,6 +94,13 @@ A: Yes — `RUN install-php-extensions <name>` in a layer on top.
 
 **Q: Is there a bookworm image?**
 A: No. Only trixie is built now. Older `-bookworm` tags stay on Docker Hub but are no longer updated.
+
+## Licence
+
+The repository's build files are MIT. PHP (PHP License 3.01), Composer and WP-CLI (MIT), Node.js
+(MIT), npm (Artistic-2.0), the MariaDB client (GPL-2.0), FFmpeg as Debian builds it
+(GPL-2.0-or-later) and the other packages keep their own licences; the
+[Licence section](https://github.com/morsalin1342/php-docker#licence) lists them.
 
 ---
 
