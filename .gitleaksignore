@@ -1,0 +1,16 @@
+# gitleaks findings that are not secrets.
+#
+# The generic-api-key rule matches the two ARG lines in the Dockerfile that hold the
+# public OpenPGP fingerprints of the NodeSource and MariaDB repository signing keys
+# (NODE_KEY_FPR and MARIADB_KEY_FPR). They are published by NodeSource and MariaDB so
+# that anyone can check the keys; the build compares the downloaded keys with them.
+#
+# Commits that added or moved those lines (as `gitleaks git` reports them):
+578c5c12ebb78d8e1cf1acb7e916f6c784072f12:Dockerfile:generic-api-key:14
+578c5c12ebb78d8e1cf1acb7e916f6c784072f12:Dockerfile:generic-api-key:22
+593ba641a1c60456e7bd4aafe78a1eb0dbb62f94:Dockerfile:generic-api-key:10
+593ba641a1c60456e7bd4aafe78a1eb0dbb62f94:Dockerfile:generic-api-key:18
+# The same lines in the working tree (as `gitleaks dir .` reports them). These name a
+# line number, so update them if lines are added above the two ARGs.
+Dockerfile:generic-api-key:14
+Dockerfile:generic-api-key:22
