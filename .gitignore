@@ -7,3 +7,6 @@
 .codex/
 .cursor/
 .kimi/
+
+# Created by `docker compose up` (the application directory of docker-compose.yml).
+/src/

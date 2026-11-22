@@ -57,6 +57,10 @@ services:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
 ```
 
+This is the repository's [`docker-compose.yml`](docker-compose.yml). Its [`nginx.conf`](nginx.conf)
+serves static files and passes `.php` requests to the `php` service on port 9000; put the
+application in `./src` and run `docker compose up`, then open <http://localhost:8080>.
+
 ### For CLI Tasks
 ```bash
 # Run Composer install

@@ -51,6 +51,8 @@ services:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
 ```
 
+A minimal [`nginx.conf`](https://github.com/morsalin1342/php-docker/blob/master/nginx.conf) that passes `.php` requests to the `php` service is in the repository.
+
 ## CI/CD Example (GitHub Actions)
 
 ```yaml
