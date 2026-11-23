@@ -1,0 +1,12 @@
+.idea/
+.vscode/
+.venv
+.ai/
+.claude/
+.gemini/
+.codex/
+.cursor/
+.kimi/
+
+# Created by `docker compose up` (the application directory of docker-compose.yml).
+/src/

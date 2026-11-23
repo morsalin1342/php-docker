@@ -1,0 +1,7 @@
+# The build reads only the Dockerfile, scripts/ and data/. Everything else stays
+# out of the build context.
+*
+!Dockerfile
+!scripts/
+!data/installable-extensions
+!data/supported-extensions

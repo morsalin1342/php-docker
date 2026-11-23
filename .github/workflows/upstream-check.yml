@@ -1,0 +1,27 @@
+name: Upstream check
+
+# Weekly comparison of the version pins in the Dockerfile with the latest upstream
+# releases: the PHP security floors, Node.js 24 (NodeSource and nodejs.org), npm,
+# Composer, WP-CLI and the PHP extension installer. The run fails, and lists what is
+# behind, when any pin is older than upstream. It changes nothing.
+
+on:
+  schedule:
+    - cron: '41 5 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    if: github.repository == 'morsalin1342/php-docker'
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Compare the pins with upstream
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: bash scripts/check-upstream.sh

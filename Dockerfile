@@ -1,0 +1,166 @@
+# Use a build-time argument to specify the PHP version. Defaulting to 8.4
+ARG PHP_VERSION=8.4
+# Use a build-time argument to specify the PHP variant (e.g., fpm, cli). Defaulting to fpm.
+ARG IMAGE_TYPE=fpm
+# Use a build-time argument to specify the Node.js version. Defaulting to 24.
+ARG NODE_VERSION=24
+# Exact NodeSource package of that Node.js line (24.22.3, the 2026-11-10 security release; NodeSource node_24.x, 2026-11-22).
+ARG NODE_PACKAGE_VERSION=24.22.3-1nodesource1
+# npm replaces the one bundled with Node: npm 11.19.1 (Node 24.22.1) still bundles
+# brace-expansion and undici releases with high CVEs; npm 12.2.3 bundles undici
+# 6.29.1, which fixes CVE-2026-109869, CVE-2026-109383 and CVE-2026-87018.
+ARG NPM_VERSION=12.2.3
+# Fingerprint of the NodeSource repository signing key (deb.nodesource.com/gpgkey/nodesource-repo.gpg.key).
+ARG NODE_KEY_FPR=6F71F525282841EEDAF851B42F59B5F99B1BE0B4
+# Debian release of the base image. Only trixie is built; use bookworm here only
+# for a PHP version whose base image has no trixie variant.
+ARG DEBIAN_RELEASE=trixie
+# MariaDB release series of the client tools, installed from MariaDB's own apt
+# repository (the Debian client is older and conflicts with the official one).
+ARG MARIADB_SERIES=12.3
+# Fingerprint of the MariaDB release signing key (mariadb.org/mariadb_release_signing_key.asc).
+ARG MARIADB_KEY_FPR=177F4010FE56CA3336300305F1656F24C74CD1D8
+# WP-CLI release and the SHA-256 of its phar (github.com/wp-cli/wp-cli/releases).
+ARG WP_CLI_VERSION=2.12.0
+ARG WP_CLI_SHA256=ce34ddd838f7351d6759068d09793f26755463b4a4610a5a5c0a97b68220d85c
+
+# Use the ARG to pull the correct base image. This base is not pinned by digest on
+# purpose: the tag comes from the build matrix (one per PHP version and variant), and
+# the weekly rebuild pulls it again so PHP patch releases and Debian fixes arrive. The
+# security floor in step 0 refuses a base older than the fixed PHP releases.
+FROM php:${PHP_VERSION}-${IMAGE_TYPE}-${DEBIAN_RELEASE}
+
+# bash with pipefail, so a failing command on the left of a pipe fails the RUN.
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# licenses is empty on purpose. The repository's own files are MIT, but the image
+# combines software under many licences (the README's Licence section names the main
+# ones; the SBOM each build keeps lists every package), and no single SPDX expression
+# has been derived for all of it. The base image sets no licences label today; the
+# empty value keeps it that way if one is added.
+LABEL org.opencontainers.image.title="php" \
+      org.opencontainers.image.description="PHP-FPM and CLI with 51 extensions added to the official image, Composer, WP-CLI, the MariaDB client and Node.js" \
+      org.opencontainers.image.source="https://github.com/morsalin1342/php-docker" \
+      org.opencontainers.image.licenses=""
+
+# Re-declare ARGs to be available in subsequent build stages
+ARG PHP_VERSION
+ARG IMAGE_TYPE
+ARG NODE_VERSION
+ARG NODE_PACKAGE_VERSION
+ARG NPM_VERSION
+ARG NODE_KEY_FPR
+ARG DEBIAN_RELEASE
+ARG MARIADB_SERIES
+ARG MARIADB_KEY_FPR
+ARG WP_CLI_VERSION
+ARG WP_CLI_SHA256
+
+# ==> 0. Refuse a PHP below the fixed releases <==
+# The November 2026 releases (8.2.36, 8.3.37, 8.4.28, 8.5.13) fix 14 advisories, among them
+# CVE-2026-129496, CVE-2026-129481, CVE-2026-126714 and CVE-2026-129289 (php.net/ChangeLog-8.php).
+# A base image older than that fails the build instead of shipping. Raise the floor when
+# a later advisory needs it.
+# The single quotes are PHP code, so $argv is PHP's, not the shell's.
+# hadolint ignore=SC2016
+RUN set -eu; \
+    case "${PHP_VERSION}" in \
+      8.2) min=8.2.36 ;; \
+      8.3) min=8.3.37 ;; \
+      8.4) min=8.4.28 ;; \
+      8.5) min=8.5.13 ;; \
+      *) echo "no security floor is set for PHP ${PHP_VERSION}"; exit 1 ;; \
+    esac; \
+    php -r 'exit(version_compare(PHP_VERSION, $argv[1], ">=") ? 0 : 1);' "$min" \
+      || { echo "PHP $(php -r 'echo PHP_VERSION;') is below the fixed release ${min}"; exit 1; }
+
+# ==> 1. Install System Dependencies & Node.js <==
+# Install essential system packages and Node.js in a single layer for efficiency.
+# The MariaDB client comes from MariaDB's own repository, whose key is checked
+# against a pinned fingerprint. MariaDB 11.8 and later ship no mysql-named
+# commands, so small wrappers run the mariadb tools under their own names (a
+# bare symlink makes every call print a "Deprecated program name" notice).
+# Node.js comes from NodeSource's apt repository the same way: key checked against
+# a pinned fingerprint, exact package version (no installer script is piped into a shell).
+# The other Debian packages are not pinned to versions: they come from trixie and its
+# security updates as of the build, which the weekly rebuild refreshes.
+# hadolint ignore=DL3008
+RUN set -eux; \
+    export DEBIAN_FRONTEND=noninteractive; \
+    apt-get update; \
+    # Debian's security updates for everything the base image ships (zlib1g
+    # CVE-2026-85091, libbrotli1, ImageMagick, OpenEXR and others fixed in trixie).
+    apt-get upgrade -y --no-install-recommends; \
+    apt-get install -y --no-install-recommends ca-certificates curl gnupg; \
+    install -d -m 0755 /etc/apt/keyrings; \
+    curl -fsSL https://mariadb.org/mariadb_release_signing_key.asc -o /etc/apt/keyrings/mariadb.asc; \
+    gpg --show-keys --with-colons /etc/apt/keyrings/mariadb.asc | grep -q "^fpr:::::::::${MARIADB_KEY_FPR}:"; \
+    . /etc/os-release; \
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key -o /etc/apt/keyrings/nodesource.asc; \
+    gpg --show-keys --with-colons /etc/apt/keyrings/nodesource.asc | grep -q "^fpr:::::::::${NODE_KEY_FPR}:"; \
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.asc] https://deb.nodesource.com/node_${NODE_VERSION}.x nodistro main" > /etc/apt/sources.list.d/nodesource.list; \
+    echo "deb [signed-by=/etc/apt/keyrings/mariadb.asc] https://mirror.mariadb.org/repo/${MARIADB_SERIES}/debian ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/mariadb.list; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+        acl \
+        mariadb-client \
+        dnsutils \
+        git \
+        gosu \
+        jq \
+        less \
+        libcap2-bin \
+        libfcgi-bin \
+        libnss3-tools \
+        msmtp \
+        msmtp-mta \
+        netcat-openbsd \
+        procps \
+        unzip \
+        wget \
+        zip \
+        ffmpeg \
+        "nodejs=${NODE_PACKAGE_VERSION}"; \
+    for t in mysql:mariadb mysqldump:mariadb-dump mysqlcheck:mariadb-check mysqladmin:mariadb-admin mysqlimport:mariadb-import mysqlshow:mariadb-show; do \
+        printf '#!/bin/bash\nexec -a %s /usr/bin/%s "$@"\n' "${t#*:}" "${t#*:}" > "/usr/bin/${t%%:*}"; \
+        chmod 0755 "/usr/bin/${t%%:*}"; \
+    done; \
+    npm install -g "npm@${NPM_VERSION}"; \
+    npm cache clean --force; \
+    test "$(npm -v)" = "${NPM_VERSION}"; \
+    rm -rf /var/lib/apt/lists/* /root/.npm
+
+# ==> 2. Install PHP Extensions <==
+# First, copy the main installer utility from its official image, pinned to a release
+# and its digest. The workflow reads this tag to fetch the same release's
+# data/supported-extensions; move the tag, the digest and that file together.
+COPY --from=ghcr.io/mlocati/php-extension-installer:2.13.2@sha256:4fd45396c16685266d32bf147a24ecd5e81029d3820295895bf4a90131190ac9 /usr/bin/install-php-extensions /usr/local/bin/
+
+# Copy our custom script and data files
+COPY ./scripts/install-extensions.sh /usr/local/bin/
+COPY ./data/installable-extensions /tmp/installable-extensions
+COPY ./data/supported-extensions /tmp/supported-extensions
+
+# Make our script executable, run it with the correct PHP_VERSION,
+# and then clean up the temporary files.
+RUN chmod +x /usr/local/bin/install-extensions.sh && \
+    IPE_ICU_EN_ONLY=1 install-extensions.sh ${PHP_VERSION} && \
+    rm /tmp/installable-extensions /tmp/supported-extensions
+
+# ==> 3. Install Global PHP Tools <==
+# Copy Composer from the official image, pinned to a release and its digest
+COPY --from=composer:2.11.2@sha256:50ea4d33fdcde1adb0f045547295faa1548b33872e5f789dae5b02ce2fb5de93 /usr/bin/composer /usr/local/bin/composer
+
+# Add WP-CLI (WordPress Command Line Interface)
+# (a pinned release, verified against its published SHA-256)
+RUN set -eux; \
+    curl -fsSL -o /usr/local/bin/wp "https://github.com/wp-cli/wp-cli/releases/download/v${WP_CLI_VERSION}/wp-cli-${WP_CLI_VERSION}.phar"; \
+    echo "${WP_CLI_SHA256}  /usr/local/bin/wp" | sha256sum -c -; \
+    chmod 0755 /usr/local/bin/wp
+
+# ==> 4. Configure PHP <==
+# Use the production php.ini configuration file
+RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
+# No sendmail_path is baked in: PHP's compiled default (/usr/sbin/sendmail -t -i)
+# already resolves to msmtp via msmtp-mta, so mail() works once a deployer supplies
+# an SMTP relay in /etc/msmtprc. No php.ini override needed.
