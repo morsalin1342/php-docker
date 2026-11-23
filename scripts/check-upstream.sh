@@ -10,7 +10,8 @@
 #   - the php-extension-installer image tag against its latest release.
 #
 # Prints one line per check and exits 1 if anything is behind, 2 if a lookup failed.
-# A NOTE line (a PHP minor php.net supports that the build matrix does not include)
+# A NOTE line (a PHP minor php.net supports that the build matrix does not include,
+# while some listed extension still lacks installer support for it)
 # does not change the exit status. Needs bash, curl and jq. GITHUB_TOKEN, when set, is
 # sent to the GitHub API to avoid its anonymous rate limit.
 set -euo pipefail
@@ -67,11 +68,32 @@ done <<<"$floors"
 
 # The PHP minors the publish workflow builds, space-separated.
 matrix=$(sed -n "s/^ *php_version: *\\[\\(.*\\)\\]/\\1/p" .github/workflows/docker-publish.yml | tr -d "',")
+# A supported minor joins the matrix only once the latest extension installer
+# release supports every extension in data/installable-extensions for it. Until then
+# it is a NOTE naming the missing extensions; once none are missing it is BEHIND.
+ipe_latest=$(gh_latest mlocati/docker-php-extension-installer || true)
+ipe_supported=""
+if [ -n "$ipe_latest" ] && [ "$ipe_latest" != null ]; then
+    ipe_supported=$(fetch "https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/${ipe_latest}/data/supported-extensions" || true)
+fi
 for minor in $supported; do
     case " ${matrix} " in
-        *" ${minor} "*) ;;
-        *) note "php.net lists PHP ${minor} as supported; the build matrix does not include it" ;;
+        *" ${minor} "*) continue ;;
     esac
+    if [ -z "$ipe_supported" ]; then
+        broken "PHP ${minor}: could not read the extension installer's supported-extensions"
+        continue
+    fi
+    missing=$(awk -v v="$minor" '
+        FNR==NR { ok=0; for (i=2; i<=NF; i++) if ($i == v) ok=1; if (ok) has[$1]=1; next }
+        NF && !($1 in has) { print $1 }
+    ' <(printf '%s\n' "$ipe_supported") data/installable-extensions | xargs)
+    total=$(grep -c . data/installable-extensions)
+    if [ -n "$missing" ]; then
+        note "PHP ${minor} is supported upstream but not built: $(wc -w <<<"$missing") of ${total} listed extensions lack support in php-extension-installer ${ipe_latest} (${missing})"
+    else
+        late "PHP ${minor}: php-extension-installer ${ipe_latest} supports all ${total} listed extensions; add ${minor} to the build matrix"
+    fi
 done
 
 # Node.js from NodeSource, and the same version on nodejs.org.
